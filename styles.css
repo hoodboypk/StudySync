@@ -1,4 +1,19 @@
-/* Reset some basic styles */
+:root {
+    --container-width: 1140px;
+    --primary-color: #1a73e8;
+    --primary-color-alt: #1464cc;
+    --background-light: #f7f7f7;
+    --text-dark: #333333;
+    --text-muted: #757575;
+    --border-color: #e0e0e0;
+    --font-family: 'Roboto', sans-serif;
+    --border-radius: 5px;
+    --spacing: 16px;
+    --transition-duration: 0.3s;
+    --shadow-small: 0 2px 4px rgba(0, 0, 0, 0.1);
+}
+
+/* Global Reset */
 * {
     margin: 0;
     padding: 0;
@@ -6,25 +21,26 @@
 }
 
 body {
-    font-family: 'Roboto', sans-serif;
-    background-color: #f4f4f4;
-    color: #333;
-    padding: 20px;
+    font-family: var(--font-family);
+    background-color: var(--background-light);
+    color: var(--text-dark);
     line-height: 1.6;
+    padding: 20px;
 }
 
-/* Navbar styling */
+/* Navbar Styling */
 nav {
-    background-color: #ffffff;
-    border-bottom: 1px solid #e0e0e0;
+    background-color: var(--background-light);
+    border-bottom: 1px solid var(--border-color);
     padding: 10px 0;
+    box-shadow: var(--shadow-small);
 }
 
 nav ul {
     list-style-type: none;
     display: flex;
     justify-content: center;
-    gap: 30px;
+    gap: 40px;
 }
 
 nav ul li {
@@ -32,75 +48,60 @@ nav ul li {
 }
 
 nav ul li a {
-    color: #333;
+    color: var(--primary-color);
     text-decoration: none;
     font-size: 16px;
     font-weight: 500;
     padding: 5px 10px;
-    transition: color 0.2s ease;
+    transition: color var(--transition-duration);
 }
 
 nav ul li a:hover {
-    color: #007BFF;
+    color: var(--primary-color-alt);
 }
 
-/* Table styles */
-section h2 {
-    font-size: 24px;
-    margin-bottom: 20px;
-    text-align: center;
-    color: #333;
-    font-weight: 500;
+/* Container */
+.container {
+    max-width: var(--container-width);
+    margin: 0 auto;
+    padding: 20px;
 }
 
+/* Table Styling */
 table {
     width: 100%;
     border-collapse: collapse;
-    margin-bottom: 30px;
+    margin-bottom: var(--spacing);
+    background-color: white;
+    border-radius: var(--border-radius);
+    box-shadow: var(--shadow-small);
 }
 
 table th, table td {
-    padding: 12px;
+    padding: var(--spacing);
     text-align: center;
-    border-bottom: 1px solid #e0e0e0;
+    border-bottom: 1px solid var(--border-color);
     font-size: 14px;
-    color: #555;
 }
 
 table th {
-    background-color: #fafafa;
+    background-color: var(--background-light);
     font-weight: 500;
 }
 
 table tr:nth-child(even) {
-    background-color: #f9f9f9;
+    background-color: #fafafa;
 }
 
 table tr:hover {
-    background-color: #f1f1f1;
+    background-color: #f0f0f0;
 }
 
-/* Button styling */
-button {
-    padding: 10px 15px;
-    background-color: #007BFF;
-    color: white;
-    border: none;
-    border-radius: 3px;
-    font-size: 14px;
-    cursor: pointer;
-    transition: background-color 0.2s ease;
-}
-
-button:hover {
-    background-color: #0056b3;
-}
-
-/* Form styling */
+/* Form Styling */
 form {
     display: flex;
     flex-direction: column;
-    gap: 20px;
+    gap: var(--spacing);
     margin: 30px auto;
     max-width: 500px;
 }
@@ -108,36 +109,49 @@ form {
 form label {
     font-weight: 500;
     font-size: 14px;
-    color: #333;
+    color: var(--text-dark);
 }
 
 form input, form select {
     padding: 10px;
     font-size: 14px;
-    border: 1px solid #e0e0e0;
-    border-radius: 3px;
-    background-color: #fafafa;
-    transition: border-color 0.2s ease;
+    border: 1px solid var(--border-color);
+    border-radius: var(--border-radius);
+    background-color: #ffffff;
+    transition: border-color var(--transition-duration);
 }
 
 form input:focus, form select:focus {
-    border-color: #007BFF;
+    border-color: var(--primary-color);
     outline: none;
 }
 
 form button {
-    font-size: 14px;
     padding: 10px 0;
+    background-color: var(--primary-color);
+    color: white;
+    border: none;
+    border-radius: var(--border-radius);
+    font-size: 14px;
+    cursor: pointer;
+    transition: background-color var(--transition-duration);
 }
 
-/* Time Picker Styling */
-form .time-picker {
+form button:hover {
+    background-color: var(--primary-color-alt);
+}
+
+/* Time Picker */
+.time-picker {
     display: flex;
-    gap: 10px;
-    justify-content: space-between;
+    gap: var(--spacing);
 }
 
-/* Goals list styling */
+input[type="time"] {
+    width: 100%;
+}
+
+/* Goals List */
 #goals-section ul {
     list-style-type: none;
     padding-left: 0;
@@ -146,30 +160,17 @@ form .time-picker {
 #goals-section ul li {
     margin: 10px 0;
     font-size: 16px;
-    color: #333;
+    color: var(--text-dark);
     position: relative;
 }
 
-/* Day selector styling */
-.day-select {
-    margin-top: 20px;
-    text-align: center;
-}
-
-.day-select select {
-    padding: 10px;
-    font-size: 14px;
-    border-radius: 3px;
-    border: 1px solid #e0e0e0;
-}
-
-/* Responsive design */
+/* Responsive Design */
 @media (max-width: 768px) {
     nav ul {
         flex-direction: column;
         align-items: center;
     }
-    
+
     form, table {
         font-size: 0.9em;
     }
