@@ -1,0 +1,36 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Study Timetable</title>
+    <link rel="stylesheet" href="styles.css">
+</head>
+<body>
+    <div class="container">
+        <h1>Study Timetable</h1>
+        <div class="day-buttons">
+            <button onclick="showDay('monday')">Monday</button>
+            <button onclick="showDay('tuesday')">Tuesday</button>
+            <button onclick="showDay('wednesday')">Wednesday</button>
+            <button onclick="showDay('thursday')">Thursday</button>
+            <button onclick="showDay('friday')">Friday</button>
+            <button onclick="showDay('saturday')">Saturday</button>
+        </div>
+
+        <table id="timetable">
+            <thead>
+                <tr>
+                    <th>Time Slot</th>
+                    <th id="day-column">Monday</th>
+                </tr>
+            </thead>
+            <tbody id="timetable-body">
+                <!-- Rows will be inserted dynamically -->
+            </tbody>
+        </table>
+    </div>
+
+    <script src="script.js"></script>
+</body>
+</html>
