@@ -1,189 +1,120 @@
-/* General Styles */
+/* General styles */
 body {
     font-family: Arial, sans-serif;
+    background-color: white;
+    color: black;
     margin: 0;
     padding: 0;
-    background-color: #f4f4f9;
 }
 
 h2 {
-    color: #333;
+    color: black;
     text-align: center;
-    margin-bottom: 20px;
+    background-color: #257180; /* Updated heading color */
+    padding: 10px;
+    border-radius: 5px;
+}
+
+/* Navbar styles */
+nav {
+    background-color: black;
+    padding: 10px 0;
+    text-align: center;
 }
 
 nav ul {
     list-style-type: none;
-    background-color: #007bff;
-    padding: 10px 0;
     margin: 0;
-    text-align: center;
+    padding: 0;
 }
 
 nav ul li {
     display: inline;
-    margin: 0 15px;
+    margin-right: 20px;
 }
 
 nav ul li a {
-    text-decoration: none;
     color: white;
-    font-weight: bold;
+    text-decoration: none;
+    padding: 10px;
+    border-radius: 5px;
 }
 
 nav ul li a:hover {
-    text-decoration: underline;
-}
-
-/* Timetable Section */
-table {
-    width: 80%;
-    margin: 0 auto;
-    border-collapse: collapse;
-    margin-bottom: 20px;
-}
-
-table th, table td {
-    border: 1px solid #ddd;
-    padding: 12px 20px;
-    text-align: center;
-}
-
-table th {
-    background-color: #007bff;
-    color: white;
-    font-weight: bold;
-}
-
-table td {
-    background-color: #f9f9f9;
-}
-
-.day-select {
-    text-align: center;
-    margin: 20px 0;
-}
-
-.day-select select {
-    padding: 5px;
-    font-size: 16px;
-}
-
-/* Edit/Add/Delete Form */
-form {
-    width: 60%;
-    margin: 0 auto;
     background-color: white;
-    padding: 20px;
-    border: 1px solid #ddd;
-    border-radius: 8px;
-    box-shadow: 0px 0px 10px rgba(0, 0, 0, 0.1);
+    color: black;
 }
 
-form label {
+/* Timetable section */
+#timetable-section {
+    margin: 20px;
+}
+
+table {
+    width: 100%;
+    border-collapse: collapse;
+    margin-top: 10px;
+}
+
+th, td {
+    padding: 10px;
+    text-align: left;
+    border-bottom: 1px solid black;
+}
+
+thead th {
+    background-color: #257180; /* Updated timetable header background */
+    color: white;
+}
+
+/* Dropdown styles */
+select {
+    width: 100%;
+    padding: 8px;
+    margin: 5px 0;
+    background-color: #F5EFFF; /* Dropdown background */
+    border: 1px solid black;
+    border-radius: 5px;
+}
+
+/* Form section */
+form {
+    background-color: #F5EFFF;
+    padding: 20px;
+    border-radius: 5px;
+    margin-top: 20px;
+}
+
+label {
     display: block;
     margin-bottom: 5px;
     font-weight: bold;
 }
 
-form select, form input {
-    width: 100%;
-    padding: 8px;
-    margin-bottom: 15px;
-    border-radius: 4px;
-    border: 1px solid #ccc;
-    font-size: 16px;
-}
-
-button[type="submit"] {
-    width: 100%;
-    padding: 10px;
-    background-color: #28a745;
-    border: none;
+button {
+    background-color: #257180;
     color: white;
-    font-size: 16px;
+    padding: 10px 20px;
+    border: none;
+    border-radius: 5px;
     cursor: pointer;
-    border-radius: 4px;
 }
 
-button[type="submit"]:hover {
-    background-color: #218838;
+button:hover {
+    background-color: black;
 }
 
-/* Time picker layout */
 .time-picker {
-    display: flex;
-    justify-content: space-between;
+    display: grid;
+    grid-template-columns: repeat(3, 1fr);
     gap: 10px;
-    margin-bottom: 20px;
 }
 
-.time-picker select {
-    width: 32%;  /* Allocate 1/3 space for each */
-    padding: 10px;
-    border: 1px solid #ccc;
-    border-radius: 4px;
-    font-size: 16px;
-}
-
-
-/* Goals Section */
 #goals-section ul {
-    width: 60%;
-    margin: 0 auto;
-    background-color: #fff;
-    padding: 20px;
-    border: 1px solid #ddd;
-    border-radius: 8px;
-    box-shadow: 0px 0px 10px rgba(0, 0, 0, 0.1);
+    list-style: none;
+    padding: 0;
 }
 
 #goals-section ul li {
-    margin: 10px 0;
-    font-size: 18px;
-}
-
-/* Action Buttons (Edit/Delete) */
-button.edit-btn, button.delete-btn {
-    border: none;
-    padding: 8px;
-    cursor: pointer;
-    font-size: 16px;
-}
-
-button.edit-btn {
-    background-color: #007bff;
-    color: white;
-    border-radius: 4px;
-}
-
-button.edit-btn:hover {
-    background-color: #0056b3;
-}
-
-button.delete-btn {
-    background-color: #dc3545;
-    color: white;
-    border-radius: 4px;
-    margin-left: 5px;
-}
-
-button.delete-btn:hover {
-    background-color: #c82333;
-}
-
-/* Responsive Design */
-@media (max-width: 768px) {
-    form, table, #goals-section ul {
-        width: 90%;
-    }
-
-    table th, table td {
-        padding: 8px;
-    }
-
-    button.edit-btn, button.delete-btn {
-        padding: 5px;
-        font-size: 14px;
-    }
+    padding: 5px 0;
 }
