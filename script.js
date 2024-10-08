@@ -10,7 +10,7 @@ let timetable = {
 
 let editingIndex = -1;  // Tracks the index of the subject being edited
 
-// Populate hour and minute options dynamically
+// Populate hour, minute, and AM/PM dropdowns
 function populateTimeDropdowns() {
     const hourOptions = Array.from({ length: 12 }, (_, i) => i + 1);  // 1 to 12
     const minuteOptions = Array.from({ length: 60 }, (_, i) => i < 10 ? `0${i}` : `${i}`);  // 00 to 59
@@ -54,8 +54,8 @@ function showDay(day) {
             <td>${entry.time}</td>
             <td>${entry.subject}</td>
             <td>
-                <button class="edit-btn" onclick="editSubject('${day}', ${index})">Edit</button>
-                <button class="delete-btn" onclick="deleteSubject('${day}', ${index})">Delete</button>
+                <button class="edit-btn" onclick="editSubject('${day}', ${index})">✏️</button>
+                <button class="delete-btn" onclick="deleteSubject('${day}', ${index})">🗑️</button>
             </td>
         `;
         
