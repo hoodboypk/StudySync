@@ -1,101 +1,194 @@
-* {
-    margin: 0;
-    padding: 0;
-    box-sizing: border-box;
-}
-
+/* General Styling */
 body {
     font-family: 'Arial', sans-serif;
-    background-color: #f0f0f5;
-    color: #333;
-    display: flex;
-    justify-content: center;
-    align-items: center;
-    min-height: 100vh;
+    background-color: #f9f9f9;
+    margin: 0;
+    padding: 0;
 }
 
+/* Container for sections */
 .container {
-    text-align: center;
+    max-width: 1200px;
+    margin: 20px auto;
     padding: 20px;
     background-color: #fff;
-    border-radius: 15px;
-    box-shadow: 0 4px 20px rgba(0, 0, 0, 0.1);
-    max-width: 1000px;
-    width: 100%;
+    border-radius: 10px;
+    box-shadow: 0 4px 10px rgba(0, 0, 0, 0.1);
+    text-align: center;
 }
 
-h1 {
-    color: #4A90E2;
+/* Navbar Styling */
+.navbar {
+    background-color: #4A90E2;
+    overflow: hidden;
+    padding: 10px 0;
     margin-bottom: 20px;
 }
 
+.navbar a {
+    color: white;
+    padding: 14px 20px;
+    text-align: center;
+    text-decoration: none;
+    font-size: 1.2em;
+    display: inline-block;
+}
+
+.navbar a:hover {
+    background-color: #357ABD;
+    color: white;
+}
+
+/* Section Styling */
+section {
+    margin-bottom: 40px;
+}
+
+h1, h2 {
+    color: #333;
+    margin-bottom: 20px;
+}
+
+h1 {
+    font-size: 2.5em;
+}
+
+h2 {
+    font-size: 2em;
+}
+
+/* Table Styling */
 table {
     width: 100%;
     border-collapse: collapse;
-    margin: 0 auto;
+    margin-top: 20px;
 }
 
 th, td {
     padding: 15px;
-    text-align: center;
-    font-size: 1.1em;
-    border: 1px solid #ddd;
+    text-align: left;
+    border-bottom: 1px solid #ddd;
 }
 
 th {
-    background-color: #4A90E2;
-    color: #fff;
-    font-size: 1.2em;
+    background-color: #f0f0f0;
+    color: #333;
 }
 
 td {
-    background-color: #fafafa;
+    font-size: 1.1em;
 }
 
-.break {
-    background-color: #f9d871;
+tr:hover {
+    background-color: #f9f9f9;
+}
+
+button {
+    padding: 7px 15px;
+    font-size: 0.9em;
+    border: none;
+    border-radius: 4px;
+    cursor: pointer;
+    transition: background-color 0.2s ease-in-out;
+}
+
+button.edit-btn {
+    background-color: #FFD700;
+    color: black;
+}
+
+button.edit-btn:hover {
+    background-color: #FFB900;
+}
+
+button.delete-btn {
+    background-color: #FF4D4D;
+    color: white;
+}
+
+button.delete-btn:hover {
+    background-color: #E60000;
+}
+
+/* Form Styling */
+form {
+    background-color: #f0f0f0;
+    padding: 20px;
+    border-radius: 10px;
+    margin: 20px auto;
+    max-width: 600px;
+    box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
+}
+
+label {
+    display: block;
+    margin-bottom: 5px;
     font-weight: bold;
-    font-style: italic;
+    color: #333;
 }
 
-td:first-child, th:first-child {
-    background-color: #4A90E2;
-    color: #fff;
-    font-weight: bold;
-    font-size: 1.2em;
-}
-
-.day-buttons {
+input, select, button[type="submit"] {
+    width: 100%;
+    padding: 12px;
     margin-bottom: 15px;
+    border: 1px solid #ccc;
+    border-radius: 5px;
+    font-size: 1em;
+    box-sizing: border-box;
 }
 
-.day-buttons button {
-    padding: 10px 15px;
-    margin-right: 5px;
+input:focus, select:focus {
+    border-color: #4A90E2;
+    outline: none;
+}
+
+button[type="submit"] {
     background-color: #4A90E2;
     color: white;
-    border: none;
+    font-weight: bold;
     cursor: pointer;
-    border-radius: 5px;
-    transition: background-color 0.3s;
 }
 
-.day-buttons button:hover {
+button[type="submit"]:hover {
     background-color: #357ABD;
 }
 
-@media (max-width: 768px) {
-    table, th, td {
-        font-size: 0.9em;
-    }
+/* Goals List */
+#goals-list {
+    list-style-type: disc;
+    text-align: left;
+    padding-left: 40px;
+    max-width: 600px;
+    margin: 0 auto;
 }
 
-@media (max-width: 480px) {
-    table, th, td {
-        font-size: 0.8em;
+#goals-list li {
+    font-size: 1.2em;
+    margin-bottom: 10px;
+}
+
+/* Responsive Design */
+@media (max-width: 768px) {
+    .container {
+        padding: 10px;
     }
 
-    th, td {
+    table {
+        font-size: 0.9em;
+    }
+
+    form {
+        padding: 15px;
+        max-width: 100%;
+    }
+
+    .day-buttons button {
+        padding: 8px 15px;
+        font-size: 0.9em;
+    }
+
+    .navbar a {
         padding: 10px;
+        font-size: 1em;
     }
 }
