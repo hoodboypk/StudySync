@@ -47,7 +47,7 @@
         <h2>Edit/Add/Delete Subjects</h2>
         <form id="subject-form" onsubmit="handleFormSubmit(event)">
             <input type="hidden" id="edit-index">
-            
+
             <label for="day">Day:</label>
             <select id="day" required>
                 <option value="monday">Monday</option>
@@ -59,15 +59,15 @@
             </select>
 
             <!-- Start Time -->
-            <label for="start-hour">Start Time:</label>
+            <label for="start-time">Start Time:</label>
             <div class="time-picker">
                 <select id="start-hour" required>
                     <option value="" disabled selected>Hour</option>
-                    <!-- Dynamically populate -->
+                    <!-- Populate hours -->
                 </select>
                 <select id="start-minute" required>
                     <option value="" disabled selected>Minute</option>
-                    <!-- Dynamically populate -->
+                    <!-- Populate minutes -->
                 </select>
                 <select id="start-ampm" required>
                     <option value="AM">AM</option>
@@ -76,15 +76,15 @@
             </div>
 
             <!-- End Time -->
-            <label for="end-hour">End Time:</label>
+            <label for="end-time">End Time:</label>
             <div class="time-picker">
                 <select id="end-hour" required>
                     <option value="" disabled selected>Hour</option>
-                    <!-- Dynamically populate -->
+                    <!-- Populate hours -->
                 </select>
                 <select id="end-minute" required>
                     <option value="" disabled selected>Minute</option>
-                    <!-- Dynamically populate -->
+                    <!-- Populate minutes -->
                 </select>
                 <select id="end-ampm" required>
                     <option value="AM">AM</option>
@@ -98,6 +98,9 @@
             <button type="submit" id="submit-btn">Add Subject</button>
         </form>
     </section>
+
+
+
 
     <!-- Goals Section -->
     <section id="goals-section">
