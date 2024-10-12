@@ -129,3 +129,64 @@ function deleteSubject(day, index) {
 // Populate time dropdowns on page load
 populateTimeDropdowns();
 showDay('monday');  // Show Monday timetable by default
+
+// Initialize the goals array
+let goals = [];
+
+// Function to add a new goal
+function addGoal(event) {
+    event.preventDefault(); // Prevent form submission
+
+    const newGoalInput = document.getElementById('new-goal');
+    const newGoal = newGoalInput.value.trim(); // Get and trim the goal text
+
+    if (newGoal) {
+        // Add new goal to the goals array
+        goals.push(newGoal);
+
+        // Reset the input field
+        newGoalInput.value = '';
+
+        // Display the updated goals list
+        displayGoals();
+    }
+}
+
+// Function to display goals
+function displayGoals() {
+    const goalsList = document.getElementById('goals-list');
+    goalsList.innerHTML = ''; // Clear the current list
+
+    // Loop through each goal and create list items with edit and delete buttons
+    goals.forEach((goal, index) => {
+        const listItem = document.createElement('li');
+        
+        listItem.innerHTML = `
+            <span class="goal-text">${goal}</span>
+            <div class="actions">
+                <button class="edit-btn" onclick="editGoal(${index})">✏️</button>
+                <button class="delete-btn" onclick="deleteGoal(${index})">🗑️</button>
+            </div>
+        `;
+        
+        goalsList.appendChild(listItem); // Add the goal item to the list
+    });
+}
+
+// Function to edit a goal
+function editGoal(index) {
+    const newGoal = prompt("Edit your goal:", goals[index]);
+    
+    if (newGoal !== null && newGoal.trim() !== '') {
+        goals[index] = newGoal.trim(); // Update the goal
+        displayGoals(); // Refresh the goals list
+    }
+}
+
+// Function to delete a goal
+function deleteGoal(index) {
+    goals.splice(index, 1); // Remove the goal from the array
+    displayGoals(); // Refresh the goals list
+}
+
+
