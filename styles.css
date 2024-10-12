@@ -128,49 +128,100 @@ button[type="submit"]:hover {
 
 
 /* Goals Section */
-#goals-section ul {
+#goals-section {
     width: 60%;
     margin: 0 auto;
-    background-color: #fff;
+    background-color: white;
     padding: 20px;
     border: 1px solid #ddd;
     border-radius: 8px;
     box-shadow: 0px 0px 10px rgba(0, 0, 0, 0.1);
 }
 
-#goals-section ul li {
-    margin: 10px 0;
-    font-size: 18px;
+/* #goals-section h2 {
+    background-color: #257180;
+    color: white;
+    padding: 10px;
+    border-radius: 5px;
+    font-size: 1.5em;
+    text-align: center;
+    margin-bottom: 20px;
+} */
+
+#goals-list {
+    list-style-type: none;
+    padding-left: 0;
+    margin-bottom: 20px;
 }
 
-/* Action Buttons (Edit/Delete) */
-button.edit-btn, button.delete-btn {
+#goals-list li {
+    /* background-color: #F5EFFF; */
+    color: #021526;
+    padding: 10px 15px;
+    margin-bottom: 10px;
+    border: 1px solid #257180;
+    border-radius: 5px;
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+}
+
+#goals-list li button {
+    background-color: #257180;
+    color: white;
     border: none;
-    padding: 8px;
+    border-radius: 5px;
+    padding: 5px 10px;
     cursor: pointer;
-    font-size: 16px;
+    transition: background-color 0.3s ease;
+    font-size: 0.9em;
 }
 
-button.edit-btn {
-    background-color: #007bff;
+#goals-list li button:hover {
+    background-color: black;
     color: white;
-    border-radius: 4px;
 }
 
-button.edit-btn:hover {
-    background-color: #0056b3;
+/* Goal form styling */
+#goal-form {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
 }
 
-button.delete-btn {
-    background-color: #dc3545;
+#goal-form label {
+    font-size: 1.1em;
+    margin-right: 10px;
+    color: #021526;
+}
+
+#goal-form input {
+    flex-grow: 1;
+    padding: 10px;
+    border: 1px solid #257180;
+    border-radius: 5px;
+    background-color: #F5EFFF;
+    margin-right: 10px;
+    font-size: 1em;
+    color: #021526;
+}
+
+#goal-form button {
+    /* background-color: #257180; */
     color: white;
-    border-radius: 4px;
-    margin-left: 5px;
+    border: none;
+    border-radius: 5px;
+    padding:10px 20px;
+    font-size: 1em;
+    cursor: pointer;
+    transition: background-color 0.3s ease;
 }
 
-button.delete-btn:hover {
-    background-color: #c82333;
+#goal-form button:hover {
+    background-color: black;
 }
+
+
 
 /* Responsive Design */
 @media (max-width: 768px) {
