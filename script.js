@@ -8,13 +8,30 @@ let timetable = {
     saturday: []
 };
 
+let goals = []; // Array to store goals
 let editingIndex = -1;  // Tracks the index of the subject being edited
+
+// Load timetable and goals from localStorage on page load
+window.onload = function() {
+    const savedTimetable = localStorage.getItem('timetable');
+    const savedGoals = localStorage.getItem('goals');
+    
+    if (savedTimetable) {
+        timetable = JSON.parse(savedTimetable);
+        showDay('monday');  // Display Monday timetable by default
+    }
+    
+    if (savedGoals) {
+        goals = JSON.parse(savedGoals);
+        displayGoals();  // Display saved goals
+    }
+};
 
 // Populate hour, minute, and AM/PM dropdowns
 function populateTimeDropdowns() {
     const hourOptions = Array.from({ length: 12 }, (_, i) => i + 1);  // 1 to 12
     const minuteOptions = Array.from({ length: 60 }, (_, i) => i < 10 ? `0${i}` : `${i}`);  // 00 to 59
-    
+
     // Populate hour dropdowns
     const startHourSelect = document.getElementById('start-hour');
     const endHourSelect = document.getElementById('end-hour');
@@ -93,6 +110,9 @@ function handleFormSubmit(event) {
     // Reset form
     document.getElementById('subject-form').reset();
 
+    // Save updated timetable to localStorage
+    localStorage.setItem('timetable', JSON.stringify(timetable));
+
     // Show updated timetable for the current day
     showDay(day);
 }
@@ -123,17 +143,11 @@ function editSubject(day, index) {
 // Delete a subject
 function deleteSubject(day, index) {
     timetable[day].splice(index, 1);
+    localStorage.setItem('timetable', JSON.stringify(timetable));  // Save updated timetable to localStorage
     showDay(day);  // Refresh timetable display
 }
 
-// Populate time dropdowns on page load
-populateTimeDropdowns();
-showDay('monday');  // Show Monday timetable by default
-
-// Initialize the goals array
-let goals = [];
-
-// Function to add a new goal
+// Initialize the goals array and handle persistence
 function addGoal(event) {
     event.preventDefault(); // Prevent form submission
 
@@ -141,11 +155,13 @@ function addGoal(event) {
     const newGoal = newGoalInput.value.trim(); // Get and trim the goal text
 
     if (newGoal) {
-        // Add new goal to the goals array
-        goals.push(newGoal);
+        goals.push(newGoal);  // Add new goal to the goals array
 
         // Reset the input field
         newGoalInput.value = '';
+
+        // Save goals to localStorage
+        localStorage.setItem('goals', JSON.stringify(goals));
 
         // Display the updated goals list
         displayGoals();
@@ -173,20 +189,30 @@ function displayGoals() {
     });
 }
 
-// Function to edit a goal
+// Edit a goal
 function editGoal(index) {
     const newGoal = prompt("Edit your goal:", goals[index]);
     
     if (newGoal !== null && newGoal.trim() !== '') {
         goals[index] = newGoal.trim(); // Update the goal
+
+        // Save updated goals to localStorage
+        localStorage.setItem('goals', JSON.stringify(goals));
+
         displayGoals(); // Refresh the goals list
     }
 }
 
-// Function to delete a goal
+// Delete a goal
 function deleteGoal(index) {
-    goals.splice(index, 1); // Remove the goal from the array
-    displayGoals(); // Refresh the goals list
+    goals.splice(index, 1);  // Remove the goal from the array
+
+    // Save updated goals to localStorage
+    localStorage.setItem('goals', JSON.stringify(goals));
+
+    displayGoals();  // Refresh the goals list
 }
 
-
+// Populate time dropdowns on page load
+populateTimeDropdowns();
+showDay('monday');  // Show Monday timetable by default
