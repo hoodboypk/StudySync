@@ -12,28 +12,49 @@ h2 {
     margin-bottom: 20px;
 }
 
+/* Navbar Styling */
+nav {
+    background-color: black; /* Black background */
+    padding: 10px;
+    position: sticky; /* Sticky navbar */
+    top: 0;
+    z-index: 1000; /* Ensure the navbar stays on top */
+    box-shadow: 0 4px 6px rgba(0, 0, 0, 0.2); /* Add slight shadow for depth */
+}
+
 nav ul {
-    list-style-type: none;
-    background-color: #007bff;
-    padding: 10px 0;
+    display: flex;
+    justify-content: center; /* Center-align items */
+    list-style: none;
     margin: 0;
-    text-align: center;
+    padding: 0;
 }
 
 nav ul li {
-    display: inline;
-    margin: 0 15px;
+    margin: 0 15px; /* Space between items */
 }
 
 nav ul li a {
     text-decoration: none;
-    color: white;
-    font-weight: bold;
+    color: white; /* White text */
+    font-size: 18px;
+    padding: 8px 16px;
+    border-radius: 5px;
+    transition: background-color 0.3s, color 0.3s; /* Smooth hover transition */
 }
 
 nav ul li a:hover {
-    text-decoration: underline;
+    background-color: white; /* White background on hover */
+    color: black; /* Black text on hover */
+    box-shadow: 0 2px 4px rgba(0, 0, 0, 0.2); /* Slight shadow on hover */
+    cursor: pointer;
 }
+
+nav ul li a:active {
+    background-color: #F5EFFF; /* Slightly lighter on click */
+    color: #021526; /* Darker text on click */
+}
+
 
 /* Timetable Section */
 table {
