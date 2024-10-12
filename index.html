@@ -103,16 +103,21 @@
 
 
     <!-- Goals Section -->
+    <h2>Goals List</h2>
     <section id="goals-section">
-        <h2>Goals List</h2>
-        <ul>
-            <li>Complete Salesforce certification</li>
-            <li>Master Data Structures and Algorithms</li>
-            <li>Develop a strong foundation in Data Analytics</li>
-            <li>Learn Blender for 3D modeling</li>
-            <li>Advance skills in Augmented Reality</li>
+        
+        <ul id="goals-list">
+            <!-- Goals will be dynamically added here -->
         </ul>
+
+        <!-- Form to add a new goal -->
+        <form id="goal-form" onsubmit="addGoal(event)">
+            <label for="new-goal">Add a new goal:</label>
+            <input type="text" id="new-goal" placeholder="Enter a new goal" required>
+            <button type="submit">Add Goal</button>
+        </form>
     </section>
+
 
     <script src="script.js"></script>
 </body>
