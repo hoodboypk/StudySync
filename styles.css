@@ -13,7 +13,6 @@ h2 {
 }
 
 /* Navbar Styling */
-/* Navbar Styling */
 #navbar {
     display: flex;
     justify-content: space-between;
@@ -96,6 +95,11 @@ body.dark-mode {
 #navbar.dark-mode a:hover {
     color: black;
     background-color: white;
+}
+
+
+#timetable-body {
+    color: black;
 }
 
 
