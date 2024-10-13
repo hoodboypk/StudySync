@@ -1,3 +1,34 @@
+// Function to get and display the current day and time
+function displayCurrentDayTime() {
+    const currentDateTime = new Date();
+
+    // Get day of the week
+    const daysOfWeek = ['Sunday', 'Monday', 'Tuesday', 'Wednesday', 'Thursday', 'Friday', 'Saturday'];
+    const currentDay = daysOfWeek[currentDateTime.getDay()];
+
+    // Get hours, minutes, and AM/PM
+    let hours = currentDateTime.getHours();
+    const minutes = currentDateTime.getMinutes().toString().padStart(2, '0');
+    const ampm = hours >= 12 ? 'PM' : 'AM';
+    
+    // Convert 24-hour format to 12-hour format
+    hours = hours % 12;
+    hours = hours ? hours : 12;  // '0' hours should be '12'
+
+    // Format time string
+    const currentTime = `${hours}:${minutes} ${ampm}`;
+
+    // Display the day and time in the navbar
+    document.getElementById('current-day-time').textContent = `${currentDay}, ${currentTime}`;
+}
+
+// Initial display when the page loads
+displayCurrentDayTime();
+
+// Update the day and time every minute
+setInterval(displayCurrentDayTime, 60000);  // Update every 60 seconds
+
+
 // Data structure to store subjects for each day
 let timetable = {
     monday: [],
