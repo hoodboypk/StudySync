@@ -29,6 +29,39 @@ displayCurrentDayTime();
 setInterval(displayCurrentDayTime, 60000);  // Update every 60 seconds
 
 
+// Dark Mode Toggle Functionality
+const darkModeToggle = document.getElementById('dark-mode-toggle');
+const body = document.body;
+
+function setDarkMode(isDark) {
+    if (isDark) {
+        body.classList.add('dark-mode');
+        body.classList.remove('light-mode');
+        darkModeToggle.textContent = '🌞';  // Sun icon for light mode
+    } else {
+        body.classList.add('light-mode');
+        body.classList.remove('dark-mode');
+        darkModeToggle.textContent = '🌙';  // Moon icon for dark mode
+    }
+}
+
+// Check the saved preference in localStorage
+const savedMode = localStorage.getItem('darkMode');
+if (savedMode) {
+    setDarkMode(savedMode === 'dark');
+} else {
+    // Default to light mode
+    setDarkMode(false);
+}
+
+// Event listener to toggle dark mode
+darkModeToggle.addEventListener('click', () => {
+    const isDark = body.classList.contains('dark-mode');
+    setDarkMode(!isDark);
+    localStorage.setItem('darkMode', !isDark ? 'dark' : 'light');
+});
+
+
 // Data structure to store subjects for each day
 let timetable = {
     monday: [],
@@ -243,6 +276,7 @@ function deleteGoal(index) {
 
     displayGoals();  // Refresh the goals list
 }
+
 
 // Populate time dropdowns on page load
 populateTimeDropdowns();
