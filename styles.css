@@ -1,309 +1,375 @@
-/* General Styles */
-body {
-    font-family: Arial, sans-serif;
+/* Modern Timetable Manager CSS */
+:root {
+    --primary: #4361ee;       /* Vibrant blue */
+    --secondary: #3a0ca3;    /* Deep purple */
+    --accent: #f72585;       /* Pink accent */
+    --light: #f8f9fa;        /* Off-white */
+    --dark: #212529;         /* Dark gray */
+    --success: #4cc9f0;      /* Teal */
+    --card-bg: #ffffff;      /* White cards */
+    --shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
+    --radius: 12px;          /* Border radius */
+  }
+  
+  /* Dark mode variables */
+  .dark-mode {
+    --primary: #4895ef;
+    --secondary: #560bad;
+    --light: #121212;
+    --dark: #f8f9fa;
+    --card-bg: #1e1e1e;
+    --shadow: 0 4px 6px rgba(0, 0, 0, 0.3);
+  }
+  
+  /* Base Styles */
+  * {
+    box-sizing: border-box;
     margin: 0;
     padding: 0;
-    background-color: #f4f4f9;
-}
-
-h2 {
-    color: #333;
-    text-align: center;
-    margin-bottom: 20px;
-}
-
-/* Navbar Styling */
-#navbar {
+    transition: background-color 0.3s ease, color 0.3s ease;
+  }
+  
+  body {
+    font-family: 'Poppins', sans-serif;
+    line-height: 1.6;
+    background-color: var(--light);
+    color: var(--dark);
+    padding-bottom: 2rem;
+  }
+  
+  h1, h2, h3, h4 {
+    color: var(--dark);
+    margin-bottom: 1.5rem;
+  }
+  
+  a {
+    text-decoration: none;
+    color: inherit;
+  }
+  
+  /* Layout */
+  .container {
+    width: 90%;
+    max-width: 1200px;
+    margin: 0 auto;
+    padding: 0 1rem;
+  }
+  
+  /* Navbar */
+  #navbar {
+    background: linear-gradient(135deg, var(--primary), var(--secondary));
+    padding: 1rem 2rem;
+    box-shadow: var(--shadow);
+    position: sticky;
+    top: 0;
+    z-index: 100;
     display: flex;
     justify-content: space-between;
     align-items: center;
-    background-color: black;
     color: white;
-    padding: 10px;
-}
-
-#navbar ul {
+  }
+  
+  #navbar ul {
     list-style: none;
     display: flex;
-    gap: 20px;
+    gap: 1.5rem;
     margin: 0;
     padding: 0;
-}
-
-#navbar a {
-    text-decoration: none;
+  }
+  
+  #navbar a {
+    padding: 0.5rem 1rem;
+    border-radius: 50px;
+    transition: all 0.3s ease;
+    font-weight: 500;
+  }
+  
+  #navbar a:hover {
+    background: rgba(255, 255, 255, 0.2);
+    transform: translateY(-2px);
     color: white;
-}
-
-#navbar a:hover {
-    color: black;
-    background-color: white;
-    padding: 5px;
-}
-
-#current-day-time {
-    font-size: 14px;
-    color: white;
-    padding: 5px;
-    text-align: right;
-    white-space: nowrap;
-}
-
-.dark-mode-toggle {
+  }
+  
+  #current-day-time {
+    background: rgba(0, 0, 0, 0.2);
+    padding: 0.5rem 1rem;
+    border-radius: 50px;
+    font-weight: 500;
+    font-size: 0.9rem;
+  }
+  
+  .dark-mode-toggle {
     background: none;
     border: none;
-    font-size: 18px;
+    font-size: 1.5rem;
     cursor: pointer;
     color: white;
-}
-
-/* Light Mode */
-body.light-mode {
-    background-color: white;
-    color: black;
-}
-
-#navbar.light-mode {
-    background-color: black;
-    color: white;
-}
-
-#navbar.light-mode a {
-    color: white;
-}
-
-#navbar.light-mode a:hover {
-    color: black;
-    background-color: white;
-}
-
-/* Dark Mode */
-body.dark-mode {
-    background-color: #1a1a1a;
-    color: white;
-}
-
-#navbar.dark-mode {
-    background-color: #333;
-    color: white;
-}
-
-#navbar.dark-mode a {
-    color: white;
-}
-
-#navbar.dark-mode a:hover {
-    color: black;
-    background-color: white;
-}
-
-
-#timetable-body {
-    color: black;
-}
-
-
-
-/* Timetable Section */
-table {
-    width: 80%;
-    margin: 0 auto;
-    border-collapse: collapse;
-    margin-bottom: 20px;
-}
-
-table th, table td {
-    border: 1px solid #ddd;
-    padding: 12px 20px;
-    text-align: center;
-}
-
-table th {
-    background-color: #007bff;
-    color: white;
-    font-weight: bold;
-}
-
-table td {
-    background-color: #f9f9f9;
-}
-
-.day-select {
-    text-align: center;
-    margin: 20px 0;
-}
-
-.day-select select {
-    padding: 5px;
-    font-size: 16px;
-}
-
-/* Edit/Add/Delete Form */
-form {
-    width: 60%;
-    margin: 0 auto;
-    background-color: white;
-    padding: 20px;
-    border: 1px solid #ddd;
-    border-radius: 8px;
-    box-shadow: 0px 0px 10px rgba(0, 0, 0, 0.1);
-}
-
-form label {
-    display: block;
-    margin-bottom: 5px;
-    font-weight: bold;
-}
-
-form select, form input {
-    width: 100%;
-    padding: 8px;
-    margin-bottom: 15px;
-    border-radius: 4px;
-    border: 1px solid #ccc;
-    font-size: 16px;
-}
-
-button[type="submit"] {
-    width: 100%;
-    padding: 10px;
-    background-color: #28a745;
+    transition: transform 0.3s ease;
+  }
+  
+  .dark-mode-toggle:hover {
+    transform: scale(1.1);
+  }
+  
+  /* Cards */
+  .section-card {
+    background: var(--card-bg);
+    border-radius: var(--radius);
+    padding: 2rem;
+    margin: 2rem auto;
+    max-width: 1000px;
+    box-shadow: var(--shadow);
+    transition: transform 0.3s ease;
+    animation: fadeIn 0.5s ease forwards;
+  }
+  
+  .section-card:hover {
+    transform: translateY(-5px);
+  }
+  
+  /* Buttons */
+  .btn {
+    padding: 0.8rem 1.5rem;
+    border-radius: 50px;
+    font-weight: 600;
+    cursor: pointer;
+    transition: all 0.3s ease;
     border: none;
+    display: inline-flex;
+    align-items: center;
+    gap: 0.5rem;
+  }
+  
+  .btn-primary {
+    background: linear-gradient(135deg, var(--primary), var(--secondary));
     color: white;
-    font-size: 16px;
-    cursor: pointer;
-    border-radius: 4px;
-}
-
-button[type="submit"]:hover {
-    background-color: #218838;
-}
-
-/* Time picker layout */
-.time-picker {
-    display: flex;
-    justify-content: space-between;
-    gap: 10px;
-    margin-bottom: 20px;
-}
-
-.time-picker select {
-    width: 32%;  /* Allocate 1/3 space for each */
-    padding: 10px;
-    border: 1px solid #ccc;
-    border-radius: 4px;
-    font-size: 16px;
-}
-
-
-/* Goals Section */
-#goals-section {
-    width: 60%;
-    margin: 0 auto;
-    background-color: white;
-    padding: 20px;
-    border: 1px solid #ddd;
-    border-radius: 8px;
-    box-shadow: 0px 0px 10px rgba(0, 0, 0, 0.1);
-}
-
-/* #goals-section h2 {
-    background-color: #257180;
+  }
+  
+  .btn-primary:hover {
+    transform: translateY(-2px);
+    box-shadow: 0 6px 12px rgba(0, 0, 0, 0.15);
+  }
+  
+  .btn:active {
+    transform: scale(0.98);
+  }
+  
+  .btn-icon {
+    width: 40px;
+    height: 40px;
+    border-radius: 50%;
+    padding: 0;
+    justify-content: center;
+  }
+  
+  .edit-btn {
+    background-color: #ffc107;
+    color: var(--dark);
+  }
+  
+  .delete-btn {
+    background-color: #dc3545;
     color: white;
-    padding: 10px;
-    border-radius: 5px;
-    font-size: 1.5em;
+  }
+  
+  /* Timetable */
+  table {
+    width: 100%;
+    border-collapse: separate;
+    border-spacing: 0;
+    overflow: hidden;
+    margin: 1.5rem 0;
+  }
+  
+  table th {
+    background: linear-gradient(135deg, var(--primary), var(--secondary));
+    color: white;
+    padding: 1rem;
+    position: sticky;
+    top: 0;
+    text-align: left;
+  }
+  
+  table td {
+    padding: 1rem;
+    border-bottom: 1px solid rgba(0, 0, 0, 0.1);
+    transition: background 0.2s ease;
+  }
+  
+  table tr:hover td {
+    background: rgba(67, 97, 238, 0.05);
+  }
+  
+  table tr:nth-child(even) td {
+    background: rgba(0, 0, 0, 0.02);
+  }
+  
+  .day-select {
     text-align: center;
-    margin-bottom: 20px;
-} */
-
-#goals-list {
+    margin: 1.5rem 0;
+  }
+  
+  .day-select select {
+    padding: 0.5rem 1rem;
+    border-radius: var(--radius);
+    border: 2px solid #e9ecef;
+    font-size: 1rem;
+    background-color: var(--card-bg);
+    color: var(--dark);
+  }
+  
+  /* Forms */
+  .form-group {
+    margin-bottom: 1.5rem;
+  }
+  
+  .form-control {
+    width: 100%;
+    padding: 0.8rem 1rem;
+    border: 2px solid #e9ecef;
+    border-radius: 8px;
+    font-size: 1rem;
+    transition: all 0.3s ease;
+    background-color: var(--card-bg);
+    color: var(--dark);
+  }
+  
+  .form-control:focus {
+    border-color: var(--primary);
+    box-shadow: 0 0 0 3px rgba(67, 97, 238, 0.2);
+    outline: none;
+  }
+  
+  .time-picker {
+    display: grid;
+    grid-template-columns: repeat(3, 1fr);
+    gap: 1rem;
+  }
+  
+  .time-picker select {
+    appearance: none;
+    background-image: url("data:image/svg+xml;charset=UTF-8,%3csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 24 24' fill='none' stroke='currentColor' stroke-width='2' stroke-linecap='round' stroke-linejoin='round'%3e%3cpolyline points='6 9 12 15 18 9'%3e%3c/polyline%3e%3c/svg%3e");
+    background-repeat: no-repeat;
+    background-position: right 0.75rem center;
+    background-size: 1em;
+    padding: 0.8rem 1rem;
+    border: 2px solid #e9ecef;
+    border-radius: 8px;
+  }
+  
+  /* Goals */
+  #goals-list {
     list-style-type: none;
     padding-left: 0;
-    margin-bottom: 20px;
-}
-
-#goals-list li {
-    /* background-color: #F5EFFF; */
-    color: #021526;
-    padding: 10px 15px;
-    margin-bottom: 10px;
-    border: 1px solid #257180;
-    border-radius: 5px;
+    margin-bottom: 2rem;
+  }
+  
+  #goals-list li {
+    padding: 1.2rem;
+    margin-bottom: 1rem;
+    border-radius: var(--radius);
+    background: var(--card-bg);
+    box-shadow: var(--shadow);
+    transition: all 0.3s ease;
     display: flex;
     justify-content: space-between;
     align-items: center;
-}
-
-#goals-list li button {
-    background-color: #257180;
-    color: white;
-    border: none;
-    border-radius: 5px;
-    padding: 5px 10px;
-    cursor: pointer;
-    transition: background-color 0.3s ease;
-    font-size: 0.9em;
-}
-
-#goals-list li button:hover {
-    background-color: black;
-    color: white;
-}
-
-/* Goal form styling */
-#goal-form {
-    display: flex;
-    justify-content: space-between;
-    align-items: center;
-}
-
-#goal-form label {
-    font-size: 1.1em;
-    margin-right: 10px;
-    color: #021526;
-}
-
-#goal-form input {
+    border-left: 4px solid var(--accent);
+  }
+  
+  #goals-list li:hover {
+    transform: translateX(5px);
+  }
+  
+  .goal-text {
     flex-grow: 1;
-    padding: 10px;
-    border: 1px solid #257180;
-    border-radius: 5px;
-    background-color: #F5EFFF;
-    margin-right: 10px;
-    font-size: 1em;
-    color: #021526;
-}
-
-#goal-form button {
-    /* background-color: #257180; */
-    color: white;
-    border: none;
-    border-radius: 5px;
-    padding:10px 20px;
-    font-size: 1em;
-    cursor: pointer;
-    transition: background-color 0.3s ease;
-}
-
-#goal-form button:hover {
-    background-color: black;
-}
-
-
-
-/* Responsive Design */
-@media (max-width: 768px) {
-    form, table, #goals-section ul {
-        width: 90%;
+    font-size: 1.1rem;
+  }
+  
+  .actions {
+    display: flex;
+    gap: 0.5rem;
+  }
+  
+  #goal-form {
+    display: flex;
+    gap: 1rem;
+    margin-top: 1.5rem;
+  }
+  
+  #goal-form input {
+    flex-grow: 1;
+    padding: 0.8rem 1rem;
+    border: 2px solid #e9ecef;
+    border-radius: 8px;
+    font-size: 1rem;
+  }
+  
+  /* Animations */
+  @keyframes fadeIn {
+    from { opacity: 0; transform: translateY(10px); }
+    to { opacity: 1; transform: translateY(0); }
+  }
+  
+  /* Utility Classes */
+  .text-center {
+    text-align: center;
+  }
+  
+  .mt-1 { margin-top: 0.5rem; }
+  .mt-2 { margin-top: 1rem; }
+  .mt-3 { margin-top: 1.5rem; }
+  .mt-4 { margin-top: 2rem; }
+  
+  /* Responsive Design */
+  @media (max-width: 768px) {
+    #navbar {
+      flex-direction: column;
+      gap: 1rem;
+      padding: 1rem;
     }
-
+    
+    #navbar ul {
+      width: 100%;
+      justify-content: space-around;
+    }
+    
+    .section-card {
+      padding: 1.5rem;
+    }
+    
+    table {
+      font-size: 0.9rem;
+    }
+    
     table th, table td {
-        padding: 8px;
+      padding: 0.75rem;
     }
-
-    button.edit-btn, button.delete-btn {
-        padding: 5px;
-        font-size: 14px;
+    
+    .time-picker {
+      grid-template-columns: 1fr;
     }
-}
+    
+    #goal-form {
+      flex-direction: column;
+    }
+  }
+  
+  @media (max-width: 480px) {
+    .section-card {
+      padding: 1rem;
+    }
+    
+    table {
+      font-size: 0.8rem;
+    }
+    
+    table th, table td {
+      padding: 0.5rem;
+    }
+    
+    .btn {
+      padding: 0.6rem 1rem;
+      font-size: 0.9rem;
+    }
+  }
