@@ -1,283 +1,433 @@
-// Function to get and display the current day and time
-function displayCurrentDayTime() {
-    const currentDateTime = new Date();
-
-    // Get day of the week
-    const daysOfWeek = ['Sunday', 'Monday', 'Tuesday', 'Wednesday', 'Thursday', 'Friday', 'Saturday'];
-    const currentDay = daysOfWeek[currentDateTime.getDay()];
-
-    // Get hours, minutes, and AM/PM
-    let hours = currentDateTime.getHours();
-    const minutes = currentDateTime.getMinutes().toString().padStart(2, '0');
-    const ampm = hours >= 12 ? 'PM' : 'AM';
-    
-    // Convert 24-hour format to 12-hour format
-    hours = hours % 12;
-    hours = hours ? hours : 12;  // '0' hours should be '12'
-
-    // Format time string
-    const currentTime = `${hours}:${minutes} ${ampm}`;
-
-    // Display the day and time in the navbar
-    document.getElementById('current-day-time').textContent = `${currentDay}, ${currentTime}`;
+/* =========================
+   Utilities
+========================= */
+// Time helpers
+function to24h(hour, minute, ampm){
+  let h = parseInt(hour,10)%12;
+  if(ampm === 'PM') h += 12;
+  return {h, m: parseInt(minute,10)};
+}
+function minsSinceMidnight(hour, minute, ampm){
+  const {h,m} = to24h(hour, minute, ampm);
+  return h*60 + m;
+}
+function fmt12h(totalMins){
+  const h24 = Math.floor(totalMins/60);
+  const m = totalMins%60;
+  const ampm = h24>=12 ? 'PM':'AM';
+  let h12 = h24%12; if(h12===0) h12=12;
+  return `${h12}:${String(m).padStart(2,'0')} ${ampm}`;
+}
+function showToast(msg){
+  const t = document.getElementById('toast');
+  t.textContent = msg;
+  t.classList.add('show');
+  setTimeout(()=>t.classList.remove('show'), 1800);
+}
+function nowInfo(){
+  const d = new Date();
+  const days=['sunday','monday','tuesday','wednesday','thursday','friday','saturday'];
+  const day = days[d.getDay()];
+  const hours = d.getHours();
+  const minutes = d.getMinutes();
+  const ampm = hours>=12 ? 'PM':'AM';
+  const h12 = (hours%12) || 12;
+  return {day, timeLabel: `${h12}:${String(minutes).padStart(2,'0')} ${ampm}`, totalMins: hours*60+minutes};
 }
 
-// Initial display when the page loads
+/* =========================
+   State & Persistence
+========================= */
+let timetable = {
+  monday: [], tuesday: [], wednesday: [], thursday: [], friday: [], saturday: []
+};
+let goals = []; // {text, done}
+
+let editingIndex = -1;
+let currentDay = 'monday';
+
+function saveAll(){
+  localStorage.setItem('timetable', JSON.stringify(timetable));
+  localStorage.setItem('goals', JSON.stringify(goals));
+}
+function loadAll(){
+  const t = localStorage.getItem('timetable');
+  const g = localStorage.getItem('goals');
+  if(t) timetable = JSON.parse(t);
+  if(g){
+    const parsed = JSON.parse(g);
+    goals = parsed.map(x => typeof x === 'string' ? {text:x, done:false} : x);
+  }
+}
+
+/* =========================
+   DOM Refs
+========================= */
+const currentDayTimeEl = document.getElementById('current-day-time');
+const dayHeadingEl = document.getElementById('day-heading');
+const timetableBodyEl = document.getElementById('timetable-body');
+const tabs = [...document.querySelectorAll('.tab')];
+const darkToggle = document.getElementById('dark-mode-toggle');
+
+const startHour = document.getElementById('start-hour');
+const startMinute = document.getElementById('start-minute');
+const startAmpm = document.getElementById('start-ampm');
+const endHour = document.getElementById('end-hour');
+const endMinute = document.getElementById('end-minute');
+const endAmpm = document.getElementById('end-ampm');
+const subjectInput = document.getElementById('subject');
+const daySelect = document.getElementById('day');
+const submitBtn = document.getElementById('submit-btn');
+
+const clearDayBtn = document.getElementById('clear-day');
+const exportBtn = document.getElementById('export-data');
+const importInput = document.getElementById('import-data');
+const resetAllBtn = document.getElementById('reset-all');
+
+const goalForm = document.getElementById('goal-form');
+const newGoalInput = document.getElementById('new-goal');
+const goalsListEl = document.getElementById('goals-list');
+
+/* =========================
+   Current Day/Time in Navbar
+========================= */
+function displayCurrentDayTime(){
+  const d = new Date();
+  const days = ['Sunday','Monday','Tuesday','Wednesday','Thursday','Friday','Saturday'];
+  let h = d.getHours(), m = String(d.getMinutes()).padStart(2,'0');
+  const ampm = h>=12 ? 'PM':'AM'; h = h%12; if(h===0) h = 12;
+  currentDayTimeEl.textContent = `${days[d.getDay()]}, ${h}:${m} ${ampm}`;
+}
 displayCurrentDayTime();
+setInterval(displayCurrentDayTime, 60000);
 
-// Update the day and time every minute
-setInterval(displayCurrentDayTime, 60000);  // Update every 60 seconds
-
-
-// Dark Mode Toggle Functionality
-const darkModeToggle = document.getElementById('dark-mode-toggle');
-const body = document.body;
-
-function setDarkMode(isDark) {
-    if (isDark) {
-        body.classList.add('dark-mode');
-        body.classList.remove('light-mode');
-        darkModeToggle.textContent = '🌞';  // Sun icon for light mode
-    } else {
-        body.classList.add('light-mode');
-        body.classList.remove('dark-mode');
-        darkModeToggle.textContent = '🌙';  // Moon icon for dark mode
-    }
+/* =========================
+   Dark Mode
+========================= */
+function setDarkMode(isDark){
+  document.body.classList.toggle('dark-mode', isDark);
+  darkToggle.innerHTML = isDark ? '<i data-feather="sun"></i>' : '<i data-feather="moon"></i>';
+  feather.replace();
+  localStorage.setItem('darkMode', isDark ? 'dark':'light');
 }
-
-// Check the saved preference in localStorage
 const savedMode = localStorage.getItem('darkMode');
-if (savedMode) {
-    setDarkMode(savedMode === 'dark');
-} else {
-    // Default to light mode
-    setDarkMode(false);
+setDarkMode(savedMode ? savedMode==='dark' : false);
+darkToggle.addEventListener('click', ()=> setDarkMode(!document.body.classList.contains('dark-mode')));
+
+/* =========================
+   Time Dropdowns
+========================= */
+function populateTimeDropdowns(){
+  const hours = Array.from({length:12}, (_,i)=>i+1);
+  const minutes = Array.from({length:60}, (_,i)=>String(i).padStart(2,'0'));
+  [startHour, endHour].forEach(sel=>{
+    sel.innerHTML = '<option value="" disabled selected>Hour</option>';
+    hours.forEach(h=>{
+      const o = document.createElement('option'); o.value=h; o.textContent=h; sel.appendChild(o);
+    });
+  });
+  [startMinute, endMinute].forEach(sel=>{
+    sel.innerHTML = '<option value="" disabled selected>Min</option>';
+    minutes.forEach(m=>{
+      const o = document.createElement('option'); o.value=m; o.textContent=m; sel.appendChild(o);
+    });
+  });
+}
+populateTimeDropdowns();
+
+/* =========================
+   Rendering: Timetable
+========================= */
+function sortByStart(a,b){ return a.startMins - b.startMins; }
+
+function renderDay(day){
+  currentDay = day;
+  dayHeadingEl.textContent = day.charAt(0).toUpperCase()+day.slice(1);
+  daySelect.value = day;
+  tabs.forEach(t=>t.classList.toggle('active', t.dataset.day===day));
+
+  // sort
+  timetable[day].sort(sortByStart);
+
+  // build rows
+  timetableBodyEl.innerHTML = '';
+  const now = nowInfo();
+  timetable[day].forEach((entry, index)=>{
+    const tr = document.createElement('tr');
+
+    const isNow = (day===now.day) && (now.totalMins>=entry.startMins) && (now.totalMins<entry.endMins);
+    if(isNow) tr.classList.add('highlight');
+
+    tr.innerHTML = `
+      <td>
+        ${fmt12h(entry.startMins)} – ${fmt12h(entry.endMins)}
+        ${isNow ? '<span class="badge-now">Now</span>' : ''}
+      </td>
+      <td>${escapeHtml(entry.subject)}</td>
+      <td>
+        <div class="row-actions">
+          <button class="btn small" aria-label="Edit" data-action="edit"><i data-feather="edit-2"></i>Edit</button>
+          <button class="btn small danger" aria-label="Delete" data-action="delete"><i data-feather="trash"></i>Delete</button>
+        </div>
+      </td>
+    `;
+    tr.addEventListener('click', (e)=>{
+      const action = e.target.closest('button')?.dataset.action;
+      if(!action) return;
+      if(action==='edit') editSubject(day, index);
+      if(action==='delete') deleteSubject(day, index);
+    });
+    timetableBodyEl.appendChild(tr);
+  });
+  feather.replace();
 }
 
-// Event listener to toggle dark mode
-darkModeToggle.addEventListener('click', () => {
-    const isDark = body.classList.contains('dark-mode');
-    setDarkMode(!isDark);
-    localStorage.setItem('darkMode', !isDark ? 'dark' : 'light');
+function escapeHtml(str){
+  const div = document.createElement('div'); div.textContent = str; return div.innerHTML;
+}
+
+/* =========================
+   Add / Edit / Delete
+========================= */
+document.getElementById('subject-form').addEventListener('submit', (e)=>{
+  e.preventDefault();
+
+  const day = daySelect.value;
+  const sh = startHour.value, sm = startMinute.value, sap = startAmpm.value;
+  const eh = endHour.value, em = endMinute.value, eap = endAmpm.value;
+  const subject = subjectInput.value.trim();
+
+  if(!day || !sh || !sm || !eh || !em || !subject){
+    showToast('Please fill all required fields.');
+    return;
+  }
+
+  const startMins = minsSinceMidnight(sh, sm, sap);
+  const endMins = minsSinceMidnight(eh, em, eap);
+
+  if(endMins <= startMins){
+    showToast('End time must be after start time.');
+    return;
+  }
+
+  // Overlap check
+  const list = timetable[day];
+  const overlaps = list.some((item, idx)=>{
+    if(editingIndex!==-1 && idx===editingIndex) return false;
+    // Overlap if start < otherEnd && end > otherStart
+    return startMins < item.endMins && endMins > item.startMins;
+  });
+
+  if(overlaps){
+    showToast('Time overlaps an existing entry.');
+    return;
+  }
+
+  const newEntry = { startMins, endMins, subject };
+
+  if(editingIndex === -1){
+    list.push(newEntry);
+    showToast('Subject added.');
+  }else{
+    list[editingIndex] = newEntry;
+    editingIndex = -1;
+    submitBtn.querySelector('span').textContent = 'Add Subject';
+    showToast('Subject updated.');
+  }
+
+  // Reset form
+  e.target.reset();
+  saveAll();
+  renderDay(day);
 });
 
+function editSubject(day, index){
+  editingIndex = index;
+  const item = timetable[day][index];
+  daySelect.value = day;
 
-// Data structure to store subjects for each day
-let timetable = {
-    monday: [],
-    tuesday: [],
-    wednesday: [],
-    thursday: [],
-    friday: [],
-    saturday: []
-};
+  // back-calc times
+  const sh = Math.floor(item.startMins/60);
+  const sm = item.startMins%60;
+  const eh = Math.floor(item.endMins/60);
+  const em = item.endMins%60;
 
-let goals = []; // Array to store goals
-let editingIndex = -1;  // Tracks the index of the subject being edited
+  // set start
+  const s_ampm = sh>=12 ? 'PM':'AM';
+  let s_h = sh%12; if(s_h===0) s_h=12;
+  startHour.value = s_h;
+  startMinute.value = String(sm).padStart(2,'0');
+  startAmpm.value = s_ampm;
 
-// Load timetable and goals from localStorage on page load
-window.onload = function() {
-    const savedTimetable = localStorage.getItem('timetable');
-    const savedGoals = localStorage.getItem('goals');
-    
-    if (savedTimetable) {
-        timetable = JSON.parse(savedTimetable);
-        showDay('monday');  // Display Monday timetable by default
+  // set end
+  const e_ampm = eh>=12 ? 'PM':'AM';
+  let e_h = eh%12; if(e_h===0) e_h=12;
+  endHour.value = e_h;
+  endMinute.value = String(em).padStart(2,'0');
+  endAmpm.value = e_ampm;
+
+  subjectInput.value = item.subject;
+
+  submitBtn.querySelector('span').textContent = 'Save Changes';
+  showToast('Editing entry…');
+  window.scrollTo({top: document.getElementById('timetable-section').offsetTop - 60, behavior:'smooth'});
+}
+
+function deleteSubject(day, index){
+  if(!confirm('Delete this entry?')) return;
+  timetable[day].splice(index,1);
+  saveAll();
+  renderDay(day);
+  showToast('Entry deleted.');
+}
+
+/* =========================
+   Tabs / Day selection
+========================= */
+tabs.forEach(btn=>{
+  btn.addEventListener('click', ()=> renderDay(btn.dataset.day));
+});
+
+/* =========================
+   Import / Export / Clear / Reset
+========================= */
+clearDayBtn.addEventListener('click', ()=>{
+  if(!confirm(`Clear all entries for ${dayHeadingEl.textContent}?`)) return;
+  timetable[currentDay] = [];
+  saveAll();
+  renderDay(currentDay);
+  showToast('Day cleared.');
+});
+
+exportBtn.addEventListener('click', ()=>{
+  const data = { timetable, goals };
+  const blob = new Blob([JSON.stringify(data,null,2)], {type:'application/json'});
+  const url = URL.createObjectURL(blob);
+  const a = document.createElement('a');
+  a.href = url;
+  a.download = 'timetable_manager_data.json';
+  a.click();
+  URL.revokeObjectURL(url);
+  showToast('Data exported.');
+});
+
+importInput.addEventListener('change', async (e)=>{
+  const file = e.target.files?.[0];
+  if(!file) return;
+  try{
+    const text = await file.text();
+    const data = JSON.parse(text);
+    if(data.timetable && data.goals){
+      timetable = data.timetable;
+      goals = data.goals.map(x => typeof x === 'string' ? {text:x, done:false} : x);
+      saveAll();
+      renderDay(currentDay);
+      renderGoals();
+      showToast('Data imported.');
+    }else{
+      showToast('Invalid file.');
     }
-    
-    if (savedGoals) {
-        goals = JSON.parse(savedGoals);
-        displayGoals();  // Display saved goals
+  }catch(err){
+    console.error(err);
+    showToast('Import failed.');
+  }finally{
+    e.target.value = '';
+  }
+});
+
+resetAllBtn.addEventListener('click', ()=>{
+  if(!confirm('This will remove all timetable entries and goals. Continue?')) return;
+  timetable = { monday:[], tuesday:[], wednesday:[], thursday:[], friday:[], saturday:[] };
+  goals = [];
+  saveAll();
+  renderDay(currentDay);
+  renderGoals();
+  showToast('All data reset.');
+});
+
+/* =========================
+   Goals
+========================= */
+function goalItemTemplate(goal, idx){
+  const li = document.createElement('li');
+  li.className = 'goal-item';
+
+  const check = document.createElement('button');
+  check.type = 'button';
+  check.className = 'goal-check' + (goal.done ? ' checked':'');
+  check.innerHTML = goal.done ? '✓' : '';
+  check.addEventListener('click', ()=>{
+    goals[idx].done = !goals[idx].done;
+    saveAll(); renderGoals();
+  });
+
+  const text = document.createElement('div');
+  text.className = 'goal-text' + (goal.done ? ' done':'');
+  text.textContent = goal.text;
+
+  const actions = document.createElement('div');
+  actions.className = 'goal-actions';
+
+  const editBtn = document.createElement('button');
+  editBtn.className = 'btn small';
+  editBtn.innerHTML = '<i data-feather="edit-2"></i>Edit';
+  editBtn.addEventListener('click', ()=>{
+    const updated = prompt('Edit goal', goals[idx].text);
+    if(updated!==null){
+      const trimmed = updated.trim();
+      if(trimmed){
+        goals[idx].text = trimmed;
+        saveAll(); renderGoals(); showToast('Goal updated.');
+      }
     }
-};
+  });
 
-// Populate hour, minute, and AM/PM dropdowns
-function populateTimeDropdowns() {
-    const hourOptions = Array.from({ length: 12 }, (_, i) => i + 1);  // 1 to 12
-    const minuteOptions = Array.from({ length: 60 }, (_, i) => i < 10 ? `0${i}` : `${i}`);  // 00 to 59
+  const delBtn = document.createElement('button');
+  delBtn.className = 'btn small danger';
+  delBtn.innerHTML = '<i data-feather="trash"></i>Delete';
+  delBtn.addEventListener('click', ()=>{
+    if(!confirm('Delete this goal?')) return;
+    goals.splice(idx,1);
+    saveAll(); renderGoals(); showToast('Goal deleted.');
+  });
 
-    // Populate hour dropdowns
-    const startHourSelect = document.getElementById('start-hour');
-    const endHourSelect = document.getElementById('end-hour');
-    hourOptions.forEach(hour => {
-        const option = document.createElement('option');
-        option.value = hour;
-        option.textContent = hour;
-        startHourSelect.appendChild(option.cloneNode(true));
-        endHourSelect.appendChild(option.cloneNode(true));
-    });
-
-    // Populate minute dropdowns
-    const startMinuteSelect = document.getElementById('start-minute');
-    const endMinuteSelect = document.getElementById('end-minute');
-    minuteOptions.forEach(minute => {
-        const option = document.createElement('option');
-        option.value = minute;
-        option.textContent = minute;
-        startMinuteSelect.appendChild(option.cloneNode(true));
-        endMinuteSelect.appendChild(option.cloneNode(true));
-    });
+  actions.append(editBtn, delBtn);
+  li.append(check, text, actions);
+  return li;
 }
 
-// Function to show subjects for the selected day
-function showDay(day) {
-    const tableBody = document.getElementById('timetable-body');
-    const dayColumn = document.getElementById('day-column');
-    
-    dayColumn.innerHTML = day.charAt(0).toUpperCase() + day.slice(1);  // Update column header
-    tableBody.innerHTML = '';  // Clear previous table rows
-    
-    // Populate the table with subjects for the selected day
-    timetable[day].forEach((entry, index) => {
-        const row = document.createElement('tr');
-        
-        row.innerHTML = `
-            <td>${entry.time}</td>
-            <td>${entry.subject}</td>
-            <td>
-                <button class="edit-btn" onclick="editSubject('${day}', ${index})">✏️</button>
-                <button class="delete-btn" onclick="deleteSubject('${day}', ${index})">🗑️</button>
-            </td>
-        `;
-        
-        tableBody.appendChild(row);
-    });
+function renderGoals(){
+  goalsListEl.innerHTML = '';
+  goals.forEach((g,i)=> goalsListEl.appendChild(goalItemTemplate(g,i)));
+  feather.replace();
 }
 
-// Handle form submission for adding or editing subjects
-function handleFormSubmit(event) {
-    event.preventDefault();  // Prevent default form submission
+goalForm.addEventListener('submit', (e)=>{
+  e.preventDefault();
+  const text = newGoalInput.value.trim();
+  if(!text){ showToast('Please enter a goal.'); return; }
+  goals.push({text, done:false});
+  newGoalInput.value = '';
+  saveAll(); renderGoals(); showToast('Goal added.');
+});
 
-    const day = document.getElementById('day').value;
-    
-    // Get start and end times from dropdowns
-    const startTime = `${document.getElementById('start-hour').value}:${document.getElementById('start-minute').value} ${document.getElementById('start-ampm').value}`;
-    const endTime = `${document.getElementById('end-hour').value}:${document.getElementById('end-minute').value} ${document.getElementById('end-ampm').value}`;
-    
-    const subject = document.getElementById('subject').value;
-    
-    // Create time range string
-    const timeRange = `${startTime} - ${endTime}`;
+/* =========================
+   Init
+========================= */
+function init(){
+  loadAll();
 
-    const newEntry = { time: timeRange, subject };
+  // Auto-select today's tab
+  const {day} = nowInfo();
+  const today = ['monday','tuesday','wednesday','thursday','friday','saturday'].includes(day) ? day : 'monday';
+  renderDay(today);
 
-    if (editingIndex === -1) {
-        // Add new subject
-        timetable[day].push(newEntry);
-    } else {
-        // Edit existing subject
-        timetable[day][editingIndex] = newEntry;
-        editingIndex = -1;  // Reset editing index
-        document.getElementById('submit-btn').innerText = 'Add Subject';  // Reset button text
-    }
+  // Feather icons initial render
+  feather.replace();
 
-    // Reset form
-    document.getElementById('subject-form').reset();
+  // Keep current-row highlight fresh each minute
+  setInterval(()=> renderDay(currentDay), 60000);
 
-    // Save updated timetable to localStorage
-    localStorage.setItem('timetable', JSON.stringify(timetable));
-
-    // Show updated timetable for the current day
-    showDay(day);
+  renderGoals();
 }
-
-// Edit a subject
-function editSubject(day, index) {
-    editingIndex = index;
-    const subjectData = timetable[day][index];
-
-    const [start, end] = subjectData.time.split(' - ');
-    const [startHour, startMinute] = start.split(':');
-    const startAmpm = start.slice(-2);
-    const [endHour, endMinute] = end.split(':');
-    const endAmpm = end.slice(-2);
-    
-    document.getElementById('day').value = day;
-    document.getElementById('start-hour').value = startHour;
-    document.getElementById('start-minute').value = startMinute.slice(0, 2);
-    document.getElementById('start-ampm').value = startAmpm;
-    document.getElementById('end-hour').value = endHour;
-    document.getElementById('end-minute').value = endMinute.slice(0, 2);
-    document.getElementById('end-ampm').value = endAmpm;
-    document.getElementById('subject').value = subjectData.subject;
-
-    document.getElementById('submit-btn').innerText = 'Edit Subject';
-}
-
-// Delete a subject
-function deleteSubject(day, index) {
-    timetable[day].splice(index, 1);
-    localStorage.setItem('timetable', JSON.stringify(timetable));  // Save updated timetable to localStorage
-    showDay(day);  // Refresh timetable display
-}
-
-// Initialize the goals array and handle persistence
-function addGoal(event) {
-    event.preventDefault(); // Prevent form submission
-
-    const newGoalInput = document.getElementById('new-goal');
-    const newGoal = newGoalInput.value.trim(); // Get and trim the goal text
-
-    if (newGoal) {
-        goals.push(newGoal);  // Add new goal to the goals array
-
-        // Reset the input field
-        newGoalInput.value = '';
-
-        // Save goals to localStorage
-        localStorage.setItem('goals', JSON.stringify(goals));
-
-        // Display the updated goals list
-        displayGoals();
-    }
-}
-
-// Function to display goals
-function displayGoals() {
-    const goalsList = document.getElementById('goals-list');
-    goalsList.innerHTML = ''; // Clear the current list
-
-    // Loop through each goal and create list items with edit and delete buttons
-    goals.forEach((goal, index) => {
-        const listItem = document.createElement('li');
-        
-        listItem.innerHTML = `
-            <span class="goal-text">${goal}</span>
-            <div class="actions">
-                <button class="edit-btn" onclick="editGoal(${index})">✏️</button>
-                <button class="delete-btn" onclick="deleteGoal(${index})">🗑️</button>
-            </div>
-        `;
-        
-        goalsList.appendChild(listItem); // Add the goal item to the list
-    });
-}
-
-// Edit a goal
-function editGoal(index) {
-    const newGoal = prompt("Edit your goal:", goals[index]);
-    
-    if (newGoal !== null && newGoal.trim() !== '') {
-        goals[index] = newGoal.trim(); // Update the goal
-
-        // Save updated goals to localStorage
-        localStorage.setItem('goals', JSON.stringify(goals));
-
-        displayGoals(); // Refresh the goals list
-    }
-}
-
-// Delete a goal
-function deleteGoal(index) {
-    goals.splice(index, 1);  // Remove the goal from the array
-
-    // Save updated goals to localStorage
-    localStorage.setItem('goals', JSON.stringify(goals));
-
-    displayGoals();  // Refresh the goals list
-}
-
-
-// Populate time dropdowns on page load
-populateTimeDropdowns();
-showDay('monday');  // Show Monday timetable by default
+init();
