@@ -1,171 +1,180 @@
 <!DOCTYPE html>
 <html lang="en">
+
 <head>
-  <meta charset="utf-8" />
-  <meta name="viewport" content="width=device-width,initial-scale=1" />
-  <title>Timetable Manager</title>
+    <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width,initial-scale=1" />
+    <title>Timetable Manager</title>
 
-  <link rel="stylesheet" href="styles.css" />
-  <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@400;500;600;700&display=swap" rel="stylesheet">
+    <link rel="stylesheet" href="styles.css" />
+    <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@400;500;600;700&display=swap" rel="stylesheet">
 
-  <!-- feather icons (defer so script can use feather.replace after DOM load) -->
-  <script defer src="https://unpkg.com/feather-icons"></script>
+    <!-- feather icons (defer so script can use feather.replace after DOM load) -->
+    <script defer src="https://unpkg.com/feather-icons"></script>
 </head>
+
 <body>
-  <!-- NAV -->
-  <nav class="navbar">
-    <div class="nav-left">
-      <a class="brand" href="#">Timetable <span class="brand-pill">Manager</span></a>
-      <ul class="nav-links">
-        <li><a href="#home" class="nav-link">Home</a></li>
-        <li><a href="#timetable-section" class="nav-link">Timetable</a></li>
-        <li><a href="#goals-section" class="nav-link">Goals</a></li>
-      </ul>
-    </div>
-
-    <div class="nav-right">
-      <div id="current-day-time" class="chip"></div>
-      <button id="dark-mode-toggle" class="icon-btn" aria-label="Toggle dark mode">
-        <!-- icon injected by JS -->
-      </button>
-    </div>
-  </nav>
-
-  <!-- HERO -->
-  <header id="home" class="hero">
-    <div class="hero-inner">
-      <h1>Plan your day. <span class="accent">Own your week.</span></h1>
-      <p class="sub">Create a flexible daily timetable, track goals, and keep it saved on your device.</p>
-      <div class="hero-cta">
-        <a href="#timetable-section" class="btn primary"><i data-feather="calendar"></i>Open Timetable</a>
-        <a href="#goals-section" class="btn outline"><i data-feather="target"></i>View Goals</a>
-      </div>
-    </div>
-  </header>
-
-  <main class="container">
-    <!-- TIMETABLE -->
-    <section id="timetable-section" class="card">
-      <div class="card-head">
-        <div class="title-wrap">
-          <h2>Timetable</h2>
-          <span class="muted">for <strong id="day-heading">Monday</strong></span>
+    <!-- NAV -->
+    <nav class="navbar">
+        <div class="nav-left">
+            <a class="brand" href="#">Timetable <span class="brand-pill">Manager</span></a>
+            <ul class="nav-links">
+                <li><a href="#home" class="nav-link">Home</a></li>
+                <li><a href="#timetable-section" class="nav-link">Timetable</a></li>
+                <li><a href="#goals-section" class="nav-link">Goals</a></li>
+            </ul>
         </div>
 
-        <div class="toolbar">
-          <div class="tabs" role="tablist" aria-label="Select day">
-            <button class="tab" data-day="monday">Mon</button>
-            <button class="tab" data-day="tuesday">Tue</button>
-            <button class="tab" data-day="wednesday">Wed</button>
-            <button class="tab" data-day="thursday">Thu</button>
-            <button class="tab" data-day="friday">Fri</button>
-            <button class="tab" data-day="saturday">Sat</button>
-          </div>
-
-          <div class="toolbar-actions">
-            <button id="clear-day" class="btn small danger"><i data-feather="trash-2"></i> Clear Day</button>
-            <button id="export-data" class="btn small"><i data-feather="download"></i> Export</button>
-            <label class="btn small file-label">
-              <i data-feather="upload"></i> Import
-              <input id="import-data" type="file" accept="application/json" hidden>
-            </label>
-            <button id="reset-all" class="icon-btn" title="Reset all data"><i data-feather="rotate-ccw"></i></button>
-          </div>
+        <div class="nav-right">
+            <div id="current-day-time" class="chip"></div>
+            <button id="dark-mode-toggle" class="icon-btn" aria-label="Toggle dark mode">
+                <!-- icon injected by JS -->
+            </button>
         </div>
-      </div>
+    </nav>
 
-      <div class="table-wrap">
-        <table class="table" aria-label="Day timetable">
-          <thead>
-            <tr>
-              <th style="width:160px">Time</th>
-              <th>Subject</th>
-              <th style="width:120px">Actions</th>
-            </tr>
-          </thead>
-          <tbody id="timetable-body"></tbody>
-        </table>
-      </div>
-
-      <div class="divider"></div>
-
-      <!-- FORM -->
-      <form id="subject-form" class="grid-form" novalidate>
-        <input type="hidden" id="edit-index" />
-
-        <div class="group">
-          <label for="day">Day</label>
-          <select id="day" class="control" required>
-            <option value="monday">Monday</option>
-            <option value="tuesday">Tuesday</option>
-            <option value="wednesday">Wednesday</option>
-            <option value="thursday">Thursday</option>
-            <option value="friday">Friday</option>
-            <option value="saturday">Saturday</option>
-          </select>
+    <!-- HERO -->
+    <header id="home" class="hero">
+        <div class="hero-inner">
+            <h1>Plan your day. <span class="accent">Own your week.</span></h1>
+            <p class="sub">Create a flexible daily timetable, track goals, and keep it saved on your device.</p>
+            <div class="hero-cta">
+                <a href="#timetable-section" class="btn primary"><i data-feather="calendar"></i>Open Timetable</a>
+                <a href="#goals-section" class="btn outline"><i data-feather="target"></i>View Goals</a>
+            </div>
         </div>
+    </header>
 
-        <div class="group">
-          <label>Start time</label>
-          <div class="time-row">
-            <select id="start-hour" class="control" required>
-              <option value="" disabled selected>Hour</option>
-            </select>
-            <select id="start-minute" class="control" required>
-              <option value="" disabled selected>Min</option>
-            </select>
-            <select id="start-ampm" class="control" required>
-              <option value="AM">AM</option>
-              <option value="PM">PM</option>
-            </select>
-          </div>
-        </div>
+    <main class="container">
+        <!-- TIMETABLE -->
+        <section id="timetable-section" class="card">
+            <div class="card-head">
+                <div class="title-wrap">
+                    <h2>Timetable</h2>
+                    <span class="muted">for <strong id="day-heading">Monday</strong></span>
+                </div>
 
-        <div class="group">
-          <label>End time</label>
-          <div class="time-row">
-            <select id="end-hour" class="control" required>
-              <option value="" disabled selected>Hour</option>
-            </select>
-            <select id="end-minute" class="control" required>
-              <option value="" disabled selected>Min</option>
-            </select>
-            <select id="end-ampm" class="control" required>
-              <option value="AM">AM</option>
-              <option value="PM">PM</option>
-            </select>
-          </div>
-        </div>
+                <div class="toolbar">
+                    <div class="tabs" role="tablist" aria-label="Select day">
+                        <button class="tab" data-day="monday">Mon</button>
+                        <button class="tab" data-day="tuesday">Tue</button>
+                        <button class="tab" data-day="wednesday">Wed</button>
+                        <button class="tab" data-day="thursday">Thu</button>
+                        <button class="tab" data-day="friday">Fri</button>
+                        <button class="tab" data-day="saturday">Sat</button>
+                    </div>
 
-        <div class="group grow">
-          <label for="subject">Subject</label>
-          <input id="subject" class="control" type="text" placeholder="e.g., Salesforce" required />
-        </div>
+                    <div class="toolbar-actions">
+                        <button id="clear-day" class="btn small danger"><i data-feather="trash-2"></i> Clear
+                            Day</button>
+                        <button id="export-data" class="btn small"><i data-feather="download"></i> Export</button>
+                        <label class="btn small file-label">
+                            <i data-feather="upload"></i> Import
+                            <input id="import-data" type="file" accept="application/json" hidden>
+                        </label>
+                        <button id="reset-all" class="icon-btn" title="Reset all data"><i
+                                data-feather="rotate-ccw"></i></button>
+                    </div>
+                </div>
+            </div>
 
-        <div class="group end">
-          <button type="submit" id="submit-btn" class="btn primary"><i data-feather="plus"></i><span> Add Subject</span></button>
-        </div>
-      </form>
+            <div class="table-wrap">
+                <table class="table" aria-label="Day timetable">
+                    <thead>
+                        <tr>
+                            <th style="width:160px">Time</th>
+                            <th>Subject</th>
+                            <th style="width:120px">Actions</th>
+                        </tr>
+                    </thead>
+                    <tbody id="timetable-body"></tbody>
+                </table>
+            </div>
 
-      <p class="hint">Tips: Entries are auto-sorted. Overlapping times are prevented. Current slot is highlighted when viewing today.</p>
-    </section>
+            <div class="divider"></div>
 
-    <!-- GOALS -->
-    <section id="goals-section" class="card">
-      <div class="card-head"><h2>Goals</h2></div>
+            <!-- FORM -->
+            <form id="subject-form" class="grid-form" novalidate>
+                <input type="hidden" id="edit-index" />
 
-      <ul id="goals-list" class="goals"></ul>
+                <div class="group">
+                    <label for="day">Day</label>
+                    <select id="day" class="control" required>
+                        <option value="monday">Monday</option>
+                        <option value="tuesday">Tuesday</option>
+                        <option value="wednesday">Wednesday</option>
+                        <option value="thursday">Thursday</option>
+                        <option value="friday">Friday</option>
+                        <option value="saturday">Saturday</option>
+                    </select>
+                </div>
 
-      <form id="goal-form" class="goal-form">
-        <input type="text" id="new-goal" class="control" placeholder="Add a new goal" required>
-        <button type="submit" class="btn primary"><i data-feather="plus-circle"></i> Add Goal</button>
-      </form>
-    </section>
-  </main>
+                <div class="group">
+                    <label>Start time</label>
+                    <div class="time-row">
+                        <select id="start-hour" class="control" required>
+                            <option value="" disabled selected>Hour</option>
+                        </select>
+                        <select id="start-minute" class="control" required>
+                            <option value="" disabled selected>Min</option>
+                        </select>
+                        <select id="start-ampm" class="control" required>
+                            <option value="AM">AM</option>
+                            <option value="PM">PM</option>
+                        </select>
+                    </div>
+                </div>
 
-  <!-- Toast -->
-  <div id="toast" class="toast" role="status" aria-live="polite"></div>
+                <div class="group">
+                    <label>End time</label>
+                    <div class="time-row">
+                        <select id="end-hour" class="control" required>
+                            <option value="" disabled selected>Hour</option>
+                        </select>
+                        <select id="end-minute" class="control" required>
+                            <option value="" disabled selected>Min</option>
+                        </select>
+                        <select id="end-ampm" class="control" required>
+                            <option value="AM">AM</option>
+                            <option value="PM">PM</option>
+                        </select>
+                    </div>
+                </div>
 
-  <script src="script.js"></script>
+                <div class="group grow">
+                    <label for="subject">Subject</label>
+                    <input id="subject" class="control" type="text" placeholder="e.g., Salesforce" required />
+                </div>
+
+                <div class="group end">
+                    <button type="submit" id="submit-btn" class="btn primary"><i data-feather="plus"></i><span> Add
+                            Subject</span></button>
+                </div>
+            </form>
+
+            <p class="hint">Tips: Entries are auto-sorted. Overlapping times are prevented. Current slot is highlighted
+                when viewing today.</p>
+        </section>
+
+        <!-- GOALS -->
+        <section id="goals-section" class="card">
+            <div class="card-head">
+                <h2>Goals</h2>
+            </div>
+
+            <ul id="goals-list" class="goals"></ul>
+
+            <form id="goal-form" class="goal-form">
+                <input type="text" id="new-goal" class="control" placeholder="Add a new goal" required>
+                <button type="submit" class="btn primary"><i data-feather="plus-circle"></i> Add Goal</button>
+            </form>
+        </section>
+    </main>
+
+    <!-- Toast -->
+    <div id="toast" class="toast" role="status" aria-live="polite"></div>
+
+    <script src="script.js"></script>
 </body>
+
 </html>
