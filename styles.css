@@ -1,109 +1,88 @@
-/* ===== Root + Theme ===== */
 :root {
   --bg: #ffffff;
-  --fg: #0f0f10;
+  --fg: #0f1720;
   --muted: #6b7280;
   --brand: #257180;
-  /* user's preferred blue-green */
   --brand-2: #F5EFFF;
-  /* soft background tint */
-  --accent: #111111;
-  /* black */
   --card: #ffffff;
-  --line: #e5e7eb;
-  --success: #2e7d32;
-  --danger: #c62828;
-  --radius: 14px;
-  --shadow: 0 6px 24px rgba(0, 0, 0, .08);
+  --line: #e6e9ee;
+  --radius: 12px;
+  --shadow: 0 8px 30px rgba(10, 10, 10, 0.06);
 }
 
 .dark-mode {
   --bg: #0f1113;
   --fg: #e6e7ea;
-  --muted: #a4acb9;
+  --muted: #97a0ab;
   --brand: #3aa3b8;
   --brand-2: #101419;
-  --accent: #ffffff;
-  --card: #13161a;
-  --line: #1f2430;
-  --success: #4caf50;
-  --danger: #ef5350;
-  --shadow: 0 10px 30px rgba(0, 0, 0, .35);
+  --card: #111214;
+  --line: #1e2328;
+  --shadow: 0 10px 30px rgba(0, 0, 0, 0.45);
 }
 
-/* ===== Base ===== */
 * {
   box-sizing: border-box
 }
 
-html,
-body {
-  height: 100%
-}
-
 body {
   margin: 0;
-  font-family: 'Poppins', system-ui, Segoe UI, Roboto, Helvetica, Arial, sans-serif;
-  color: var(--fg);
+  font-family: 'Poppins', system-ui, Segoe UI, Roboto, Arial;
   background: var(--bg);
-  line-height: 1.6;
+  color: var(--fg);
+  line-height: 1.5;
+  min-height: 100vh
 }
 
-/* ===== Navbar ===== */
+/* NAV */
 .navbar {
   position: sticky;
   top: 0;
-  z-index: 50;
-  background: #000;
-  /* black navbar */
-  color: #fff;
   display: flex;
   align-items: center;
   justify-content: space-between;
   padding: 12px 20px;
-  border-bottom: 1px solid rgba(255, 255, 255, .08);
+  background: #000;
+  color: #fff;
+  z-index: 60;
+  border-bottom: 1px solid rgba(255, 255, 255, 0.06)
 }
 
 .brand {
   font-weight: 700;
-  letter-spacing: .2px;
-  margin-right: 16px;
-  display: inline-flex;
-  align-items: center;
-  gap: 6px;
-}
-
-.brand span {
   color: #fff;
-  background: #257180;
-  border-radius: 8px;
-  padding: 2px 8px
-}
-
-.nav-left {
+  text-decoration: none;
   display: flex;
   align-items: center;
   gap: 8px
 }
 
+.brand-pill {
+  background: var(--brand);
+  padding: 4px 10px;
+  border-radius: 10px;
+  color: #fff;
+  font-weight: 700
+}
+
 .nav-links {
   list-style: none;
   display: flex;
-  gap: 8px;
+  gap: 12px;
   margin: 0;
   padding: 0
 }
 
 .nav-link {
   color: #fff;
-  opacity: .85;
-  padding: 8px 12px;
-  border-radius: 10px;
+  opacity: .9;
+  padding: 8px 10px;
+  border-radius: 8px;
+  text-decoration: none
 }
 
-.nav-link:hover {
-  opacity: 1;
-  background: rgba(255, 255, 255, .12)
+.navlink:hover {
+  opacity: 1
 }
 
 .nav-right {
@@ -113,76 +92,72 @@ body {
 }
 
 .chip {
-  background: rgba(255, 255, 255, .12);
-  color: #fff;
+  background: rgba(255, 255, 255, 0.06);
   padding: 6px 10px;
   border-radius: 999px;
-  font-size: .9rem;
+  font-weight: 600
 }
 
 .icon-btn {
-  border: none;
   background: transparent;
+  border: none;
   color: #fff;
-  cursor: pointer;
   width: 38px;
   height: 38px;
+  border-radius: 8px;
   display: grid;
   place-items: center;
-  border-radius: 10px;
+  cursor: pointer
 }
 
-.icon-btn:hover {
-  background: rgba(255, 255, 255, .12)
-}
-
-/* ===== Hero ===== */
+/* HERO */
 .hero {
-  background: linear-gradient(180deg, #000 0%, #000 30%, var(--bg) 30%);
+  background: var(--brand-2);
+  padding: 36px 0
 }
 
 .hero-inner {
   max-width: 1100px;
   margin: 0 auto;
-  padding: 48px 20px 24px;
-  color: #fff;
+  padding: 24px
 }
 
-.hero h1 {
-  font-size: clamp(28px, 4vw, 42px);
-  margin: 0 0 10px;
+.hero-inner h1 {
+  margin: 0;
+  font-size: clamp(26px, 3.8vw, 38px);
+  color: var(--fg)
 }
 
-.hero .accent {
-  color: #F5EFFF
+.hero-inner .accent {
+  color: var(--brand)
 }
 
-.hero .sub {
-  opacity: .9;
-  max-width: 720px
+.hero-inner .sub {
+  margin-top: 8px;
+  color: var(--muted)
 }
 
 .hero-cta {
-  margin-top: 20px;
+  margin-top: 16px;
   display: flex;
-  gap: 12px;
-  flex-wrap: wrap
+  gap: 12px
 }
 
-/* ===== Container & Cards ===== */
+/* LAYOUT */
 .container {
   max-width: 1100px;
-  margin: 0 auto;
-  padding: 24px 20px
+  margin: 18px auto;
+  padding: 0 18px
 }
 
+/* CARD */
 .card {
   background: var(--card);
   border: 1px solid var(--line);
   border-radius: var(--radius);
   box-shadow: var(--shadow);
-  padding: 20px;
-  margin: 18px 0 28px;
+  padding: 18px;
+  margin-bottom: 20px
 }
 
 .card-head {
@@ -190,68 +165,30 @@ body {
   align-items: center;
   justify-content: space-between;
   gap: 12px;
-  flex-wrap: wrap;
-  margin-bottom: 12px;
+  flex-wrap: wrap
 }
 
-.title-wrap {
-  display: flex;
-  align-items: baseline;
-  gap: 8px
-}
-
-.title-wrap h2 {
-  margin: 0
-}
-
-.muted {
-  color: var(--muted);
-  font-weight: 500
-}
-
-/* ===== Buttons ===== */
+/* BUTTONS */
 .btn {
   display: inline-flex;
   align-items: center;
   gap: 8px;
   padding: 10px 14px;
-  border-radius: 12px;
+  border-radius: 10px;
   border: 1px solid var(--line);
   background: var(--card);
-  color: var(--fg);
   cursor: pointer;
-  font-weight: 600;
-  transition: transform .1s ease, background .2s ease, border-color .2s ease;
-}
-
-.btn:hover {
-  transform: translateY(-1px)
-}
-
-.btn:active {
-  transform: translateY(0)
+  font-weight: 600
 }
 
 .btn.primary {
   background: var(--brand);
-  border-color: transparent;
   color: #fff;
-}
-
-.btn.primary:hover {
-  filter: brightness(1.05)
-}
-
-.btn.outline {
-  background: transparent;
-  color: #fff;
-  border-color: rgba(255, 255, 255, .35);
+  border-color: transparent
 }
 
 .btn.small {
-  padding: 8px 12px;
-  border-radius: 10px;
-  font-weight: 600;
+  padding: 8px 10px;
   font-size: .95rem
 }
 
@@ -266,11 +203,10 @@ body {
   overflow: hidden
 }
 
-/* ===== Tabs & Toolbar ===== */
+/* TABS */
 .tabs {
   display: flex;
-  gap: 6px;
-  flex-wrap: wrap
+  gap: 6px
 }
 
 .tab {
@@ -278,9 +214,8 @@ body {
   border-radius: 999px;
   border: 1px solid var(--line);
   background: var(--brand-2);
-  color: var(--fg);
   cursor: pointer;
-  font-weight: 600;
+  font-weight: 600
 }
 
 .tab.active {
@@ -289,79 +224,52 @@ body {
   border-color: var(--brand)
 }
 
-.toolbar {
-  display: flex;
-  align-items: center;
-  gap: 12px;
-  justify-content: space-between;
-  width: 100%
-}
-
-.toolbar-actions {
-  display: flex;
-  align-items: center;
-  gap: 8px
-}
-
-/* ===== Table ===== */
+/* TABLE */
 .table-wrap {
   overflow: auto;
-  border-radius: 12px;
+  border-radius: 10px;
   border: 1px solid var(--line)
 }
 
 .table {
   width: 100%;
-  border-collapse: separate;
-  border-spacing: 0
+  border-collapse: separate
 }
 
 .table thead th {
   text-align: left;
+  padding: 12px;
   background: var(--brand);
   color: #fff;
-  padding: 12px 14px;
   position: sticky;
-  top: 0;
-  z-index: 1;
+  top: 0
 }
 
 .table tbody td {
-  padding: 12px 14px;
+  padding: 12px;
   border-top: 1px solid var(--line)
-}
-
-.table tbody tr:nth-child(even) td {
-  background: rgba(37, 113, 128, .04)
-}
-
-.table .row-actions {
-  display: flex;
-  gap: 6px;
-  justify-content: flex-end
 }
 
 .badge-now {
   background: #22c55e;
   color: #fff;
-  font-size: .75rem;
   padding: 4px 8px;
   border-radius: 999px;
-  margin-left: 8px;
+  margin-left: 8px
 }
 
 .highlight {
-  outline: 2px solid #22c55e;
+  outline: 2px solid rgba(34, 197, 94, .16);
   outline-offset: -2px
 }
 
-/* ===== Form ===== */
+/* FORM */
 .grid-form {
   display: grid;
-  gap: 14px;
+  gap: 12px;
   grid-template-columns: repeat(12, 1fr);
   align-items: end;
-  margin-top: 16px;
+  margin-top: 12px
 }
 
 .group {
@@ -380,28 +288,18 @@ body {
   justify-self: end
 }
 
-label {
-  font-weight: 600
-}
-
 .control {
-  width: 100%;
-  padding: 10px 12px;
+  padding: 10px;
   border: 1px solid var(--line);
-  border-radius: 10px;
-  background: var(--bg);
+  border-radius: 8px;
+  background: var(--card);
   color: var(--fg);
-  font: inherit;
+  width: 100%
 }
 
 .time-row {
   display: flex;
   gap: 8px
-}
-
-.hint {
-  color: var(--muted);
-  margin-top: 12px
 }
 
 .divider {
@@ -410,11 +308,16 @@ label {
   margin: 14px 0
 }
 
-/* ===== Goals ===== */
+.hint {
+  color: var(--muted);
+  margin-top: 12px
+}
+
+/* GOALS */
 .goals {
   list-style: none;
   padding: 0;
-  margin: 0 0 10px;
+  margin: 0;
   display: flex;
   flex-direction: column;
   gap: 10px
@@ -424,10 +327,10 @@ label {
   display: flex;
   align-items: center;
   gap: 12px;
+  padding: 12px;
+  border-radius: 10px;
   border: 1px solid var(--line);
-  padding: 12px 12px;
-  border-radius: 12px;
-  background: var(--card);
+  background: var(--card)
 }
 
 .goal-check {
@@ -447,7 +350,7 @@ label {
 
 .goal-text {
   flex: 1;
-  font-weight: 500
+  font-weight: 600
 }
 
 .goal-text.done {
@@ -460,7 +363,7 @@ label {
   gap: 6px
 }
 
-/* ===== Toast ===== */
+/* TOAST */
 .toast {
   position: fixed;
   left: 50%;
@@ -471,9 +374,9 @@ label {
   padding: 10px 14px;
   border-radius: 999px;
   opacity: 0;
-  transition: opacity .25s ease, transform .25s ease;
-  z-index: 60;
-  pointer-events: none;
+  transition: opacity .2s, transform .2s;
+  z-index: 80;
+  pointer-events: none
 }
 
 .toast.show {
@@ -481,8 +384,8 @@ label {
   transform: translateX(-50%) translateY(0)
 }
 
-/* ===== Responsive ===== */
-@media (max-width: 920px) {
+/* RESPONSIVE */
+@media (max-width:920px) {
   .grid-form {
     grid-template-columns: repeat(6, 1fr)
   }
@@ -501,24 +404,8 @@ label {
   }
 }
 
-@media (max-width: 580px) {
+@media (max-width:580px) {
   .nav-links {
     display: none
-  }
-
-  .hero-inner {
-    padding-bottom: 8px
-  }
-
-  .toolbar {
-    gap: 8px
-  }
-
-  .tabs {
-    gap: 4px
-  }
-
-  .tab {
-    padding: 7px 10px
   }
 }
