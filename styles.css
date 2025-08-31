@@ -101,7 +101,7 @@ body {
 .icon-btn {
   background: transparent;
   border: none;
-  color: #fff;
+  color: #e41a1a;
   width: 38px;
   height: 38px;
   border-radius: 8px;
@@ -164,8 +164,8 @@ body {
   display: flex;
   align-items: center;
   justify-content: space-between;
-  gap: 12px;
-  flex-wrap: wrap
+  gap: 16px; /* ⬅ increase spacing between tabs & buttons */
+  flex-wrap: wrap;
 }
 
 /* BUTTONS */
@@ -177,6 +177,7 @@ body {
   border-radius: 10px;
   border: 1px solid var(--line);
   background: var(--card);
+  color: var(--fg);
   cursor: pointer;
   font-weight: 600
 }
@@ -269,7 +270,7 @@ body {
   gap: 12px;
   grid-template-columns: repeat(12, 1fr);
   align-items: end;
-  margin-top: 12px
+  margin-top: 16px
 }
 
 .group {
@@ -317,7 +318,7 @@ body {
 .goals {
   list-style: none;
   padding: 0;
-  margin: 0;
+  margin: 0 0 16px 0;
   display: flex;
   flex-direction: column;
   gap: 10px
